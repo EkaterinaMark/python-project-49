@@ -1,42 +1,43 @@
 #!/usr/bin/env python3
-import random
 import prompt
+from brain_games.games import even
 
 
 def welcome_user():
+    print('Welcome to the Brain Games!')
     name = prompt.string('May I have your name? ')
     print(f'Hello, {name}!')
     return name
-    
-
-#определяет верный ответ на вопрос
-def correct_answer(number):
-    if number % 2 == 0:
-        return 'yes'
-    else:
-        return 'no'
 
 
-def main():
-    print('Welcome to the Brain Games!')
-    user_name = welcome_user()
-    print('Answer "yes" if the number is even, otherwise answer "no".')
+def game_description(game):
+    print(game.description)
+
+
+def game_session(game, name):
     count = 0
     for _ in range(3):
-        number = random.randint(1, 100)
-        print('Question:', number)
-        print('Your answer: ', end = '')
+        question = game.question()
+        correct_answer = game.correct_answer(question)
+        print('Question:', question)
+        print('Your answer: ', end='')
         user_answer = input()
-        if  user_answer == correct_answer(number):
+        if user_answer == correct_answer:
             print('Correct!')
             count += 1
         else:
-            print("'" + user_answer + "'" + ' is wrong answer ;(. Correct answer was ' + "'" + correct_answer(number) + "'")
-            print(f"Let's try again, {user_name}!")            
+            print("'" + user_answer + "'" + ' is wrong answer ;(. Correct answer was ' + "'" + correct_answer + "'")
+            print(f"Let's try again, {name}!")
             break
     if count == 3:
-        print(f'Congratulations, {user_name}!')
+        print(f'Congratulations, {name}!')
+
+
+def main():
+    user_name = welcome_user()
+    game_description(even)
+    game_session(even, user_name)
 
 
 if __name__ == '__main__':
-    main()        
+    main()
